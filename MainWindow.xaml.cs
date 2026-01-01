@@ -1,31 +1,98 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using Windows.UI;
 
 namespace NamedMetaTagManager
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private readonly NamedMetaTagManagerService _manager = new();
+
         public MainWindow()
         {
-            InitializeComponent(); // Start
+            InitializeComponent();
+            SeedEditor();
+        }
+
+        private void SeedEditor()
+        {
+            const string sample = """
+Intro text before tags.
+<note/> This paragraph includes a closed note tag.
+Here is an encapsulated tag: <summary>This is wrapped content.</summary>
+Here is a nested example: <important>Keep <childOne>child one</childOne> and <childTwo>child two</childTwo> safe</important>.
+""";
+            Editor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, sample);
+        }
+
+        private string CurrentName => string.IsNullOrWhiteSpace(TagNameInput.Text) ? "sample" : TagNameInput.Text.Trim();
+
+        private void OnAddTagClicked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _manager.AddNamedTagToEditor(Editor, CurrentName);
+                SetStatus($"Added tag '{CurrentName}'.");
+            }
+            catch (Exception ex)
+            {
+                SetStatus($"Add failed: {ex.Message}");
+            }
+        }
+
+        private void OnRemoveTagClicked(object sender, RoutedEventArgs e)
+        {
+            var removed = _manager.RemoveNamedTagFromEditor(Editor, CurrentName);
+            SetStatus(removed ? $"Removed tag '{CurrentName}'." : $"No tag '{CurrentName}' found to remove.");
+        }
+
+        private void OnHideTagClicked(object sender, RoutedEventArgs e)
+        {
+            var hidden = _manager.HideNamedTagInEditor(Editor, CurrentName, true);
+            SetStatus(hidden ? $"Hid tag '{CurrentName}'." : $"No tag '{CurrentName}' hidden.");
+        }
+
+        private void OnShowTagClicked(object sender, RoutedEventArgs e)
+        {
+            var shown = _manager.HideNamedTagInEditor(Editor, CurrentName, false);
+            SetStatus(shown ? $"Restored tag '{CurrentName}'." : $"No hidden tag '{CurrentName}' to restore.");
+        }
+
+        private void OnHiliteTagClicked(object sender, RoutedEventArgs e)
+        {
+            var hilited = _manager.HiliteNamedTagInEditor(Editor, CurrentName, true, Colors.Yellow);
+            SetStatus(hilited ? $"Highlighted tag '{CurrentName}'." : $"No tag '{CurrentName}' to highlight.");
+        }
+
+        private void OnClearHiliteTagClicked(object sender, RoutedEventArgs e)
+        {
+            var cleared = _manager.HiliteNamedTagInEditor(Editor, CurrentName, false, Colors.Transparent);
+            SetStatus(cleared ? $"Cleared highlight for '{CurrentName}'." : $"No tag '{CurrentName}' highlight to clear.");
+        }
+
+        private void OnListTagsClicked(object sender, RoutedEventArgs e)
+        {
+            var tags = _manager.GetNamedTagsInEditor(Editor);
+            SetStatus(tags.Any() ? $"Tags: {string.Join(", ", tags)}" : "No tags found.");
+        }
+
+        private void OnCheckTagClicked(object sender, RoutedEventArgs e)
+        {
+            var present = _manager.IsNamedTagPresentInEditor(Editor, CurrentName);
+            SetStatus(present ? $"Tag '{CurrentName}' is present." : $"Tag '{CurrentName}' is not present.");
+        }
+
+        private void OnGetContentClicked(object sender, RoutedEventArgs e)
+        {
+            var content = _manager.GetNamedTagContentFromEditor(Editor, CurrentName);
+            SetStatus($"Content for '{CurrentName}': {content}");
+        }
+
+        private void SetStatus(string message)
+        {
+            StatusText.Text = message;
         }
     }
 }
