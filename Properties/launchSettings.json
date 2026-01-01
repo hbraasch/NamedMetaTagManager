@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NamedMetaTagManager (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "NamedMetaTagManager (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
