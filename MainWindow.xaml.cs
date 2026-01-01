@@ -25,7 +25,7 @@ namespace NamedMetaTagManager
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); // Start
         }
     }
 }
