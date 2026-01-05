@@ -55,10 +55,6 @@ namespace NamedMetaTagManager
 
     internal class NamedMetaTagManagerService : NamedMetaTagManager
     {
-        private const string HiddenStartFormat = "[HIDDEN_START:{0}]";
-        private const string HiddenEndFormat = "[HIDDEN_END:{0}]";
-        private const string HiddenSelfFormat = "[HIDDEN_SELF:{0}]";
-
         public void AddNamedTagToEditor(RichEditBox editor, string metatagName)
         {
             var selection = editor.Document.Selection;
@@ -115,45 +111,27 @@ namespace NamedMetaTagManager
         public bool HideNamedTagInEditor(RichEditBox editor, string metatagName, bool isHidden)
         {
             var text = GetEditorText(editor);
-            if (isHidden)
-            {
-                var (startIndex, endIndex, isSelfClosing) = FindFirstTag(text, metatagName);
-                if (startIndex < 0)
-                {
-                    return false;
-                }
 
-                string updated;
-                if (isSelfClosing)
-                {
-                    updated = text.Remove(startIndex, endIndex - startIndex)
-                        .Insert(startIndex, string.Format(HiddenSelfFormat, metatagName));
-                }
-                else
-                {
-                    var startTag = $"<{metatagName}>";
-                    var endTag = $"</{metatagName}>";
-                    var endTagIndex = endIndex - endTag.Length;
-                    updated = text.Remove(endTagIndex, endTag.Length)
-                        .Insert(endTagIndex, string.Format(HiddenEndFormat, metatagName));
-                    updated = updated.Remove(startIndex, startTag.Length)
-                        .Insert(startIndex, string.Format(HiddenStartFormat, metatagName));
-                }
-
-                SetEditorText(editor, updated);
-                return true;
-            }
-
-            var revealed = text;
-            revealed = revealed.Replace(string.Format(HiddenSelfFormat, metatagName), $"<{metatagName}/>");
-            revealed = revealed.Replace(string.Format(HiddenStartFormat, metatagName), $"<{metatagName}>");
-            revealed = revealed.Replace(string.Format(HiddenEndFormat, metatagName), $"</{metatagName}>");
-            if (revealed.Equals(text, StringComparison.Ordinal))
+            var (startIndex, endIndex, isSelfClosing) = FindFirstTag(text, metatagName);
+            if (startIndex < 0)
             {
                 return false;
             }
 
-            SetEditorText(editor, revealed);
+            if (isSelfClosing)
+            {
+                ApplyHidden(editor, startIndex, endIndex - startIndex, isHidden);
+            }
+            else
+            {
+                var startTag = $"<{metatagName}>";
+                var endTag = $"</{metatagName}>";
+                var endTagIndex = endIndex - endTag.Length;
+
+                ApplyHidden(editor, startIndex, startTag.Length, isHidden);
+                ApplyHidden(editor, endTagIndex, endTag.Length, isHidden);
+            }
+
             return true;
         }
 
@@ -260,6 +238,12 @@ namespace NamedMetaTagManager
         {
             var range = editor.Document.GetRange(start, start + length);
             range.CharacterFormat.BackgroundColor = color;
+        }
+
+        private static void ApplyHidden(RichEditBox editor, int start, int length, bool isHidden)
+        {
+            var range = editor.Document.GetRange(start, start + length);
+            range.CharacterFormat.Hidden = isHidden ? FormatEffect.On : FormatEffect.Off;
         }
     }
 }
