@@ -124,12 +124,7 @@ namespace NamedMetaTagManager
             }
             else
             {
-                var startTag = $"<{metatagName}>";
-                var endTag = $"</{metatagName}>";
-                var endTagIndex = endIndex - endTag.Length;
-
-                ApplyHidden(editor, startIndex, startTag.Length, isHidden);
-                ApplyHidden(editor, endTagIndex, endTag.Length, isHidden);
+                ApplyHidden(editor, startIndex, endIndex - startIndex, isHidden);
             }
 
             return true;
