@@ -75,15 +75,9 @@ namespace NamedMetaTagManager
                 IsChecked = isChecked,
                 Tag = color,
                 VerticalAlignment = VerticalAlignment.Center,
-                Content = new Border
-                {
-                    Width = 24,
-                    Height = 24,
-                    Background = new SolidColorBrush(ToWinUIColor(color)),
-                    BorderBrush = new SolidColorBrush(WinUIColor.FromArgb(255, 200, 200, 200)),
-                    BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(4)
-                }
+                Background = new SolidColorBrush(ToWinUIColor(color)),
+                BorderBrush = new SolidColorBrush(WinUIColor.FromArgb(255, 200, 200, 200)),
+                Style = (Style)Resources["ColorCheckboxStyle"]
             };
 
             checkBox.Checked += OnCheckboxToggled;
