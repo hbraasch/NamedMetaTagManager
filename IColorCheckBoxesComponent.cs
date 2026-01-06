@@ -32,7 +32,7 @@ namespace NamedMetaTagManager
         /// Used to get current state of the component
         /// </summary>
         /// <returns></returns>
-        public (List<WinUIColor> Colors, List<bool> IsChecked) GetCurrentState()
+        public (List<WinUIColor> Colors, List<bool> IsChecked) GetCurrentState();
         /// <summary>
         /// Callback which triggers when one of the checkboxes change
         /// </summary>
