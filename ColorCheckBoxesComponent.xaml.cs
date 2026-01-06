@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using SystemDrawingColor = System.Drawing.Color;
 using WinUIColor = Windows.UI.Color;
 
 namespace NamedMetaTagManager
 {
     public sealed partial class ColorCheckBoxesComponent : UserControl, IColorCheckBoxesComponent
     {
-        private readonly List<(SystemDrawingColor Color, CheckBox CheckBox)> _checkboxes = new();
+        private readonly List<(WinUIColor Color, CheckBox CheckBox)> _checkboxes = new();
 
         public ColorCheckBoxesComponent()
         {
@@ -22,9 +21,9 @@ namespace NamedMetaTagManager
         /// <summary>
         /// Optional event to subscribe to checkbox state changes.
         /// </summary>
-        public event Action<SystemDrawingColor, bool>? CheckboxStateChanged;
+        public event Action<WinUIColor, bool>? CheckboxStateChanged;
 
-        public void Init(List<SystemDrawingColor> colors, List<bool> isChecked)
+        public void Init(List<WinUIColor> colors, List<bool> isChecked)
         {
             if (colors == null)
             {
@@ -50,12 +49,12 @@ namespace NamedMetaTagManager
             }
         }
 
-        public void Update(List<SystemDrawingColor> colors, List<bool> isChecked)
+        public void Update(List<WinUIColor> colors, List<bool> isChecked)
         {
             Init(colors, isChecked);
         }
 
-        public List<SystemDrawingColor> GetCheckedColors()
+        public List<WinUIColor> GetCheckedColors()
         {
             return _checkboxes
                 .Where(pair => pair.CheckBox.IsChecked == true)
@@ -63,14 +62,14 @@ namespace NamedMetaTagManager
                 .ToList();
         }
 
-        public Task<Action<SystemDrawingColor, bool>> CheckboxChanged()
+        public Task<Action<WinUIColor, bool>> CheckboxChanged()
         {
-            return Task.FromResult<Action<SystemDrawingColor, bool>>(NotifyCheckboxChanged);
+            return Task.FromResult<Action<WinUIColor, bool>>(NotifyCheckboxChanged);
         }
 
-        public (List<SystemDrawingColor> Colors, List<bool> IsChecked) GetCurrentState()
+        public (List<WinUIColor> Colors, List<bool> IsChecked) GetCurrentState()
         {
-            var colors = new List<SystemDrawingColor>(_checkboxes.Count);
+            var colors = new List<WinUIColor>(_checkboxes.Count);
             var states = new List<bool>(_checkboxes.Count);
 
             foreach (var (color, checkBox) in _checkboxes)
@@ -82,14 +81,14 @@ namespace NamedMetaTagManager
             return (colors, states);
         }
 
-        private void AddCheckbox(SystemDrawingColor color, bool isChecked)
+        private void AddCheckbox(WinUIColor color, bool isChecked)
         {
             var checkBox = new CheckBox
             {
                 IsChecked = isChecked,
                 Tag = color,
                 VerticalAlignment = VerticalAlignment.Center,
-                Background = new SolidColorBrush(ToWinUIColor(color)),
+                Background = new SolidColorBrush(color),
                 BorderBrush = new SolidColorBrush(WinUIColor.FromArgb(255, 200, 200, 200)),
                 Style = (Style)Resources["ColorCheckboxStyle"]
             };
@@ -103,21 +102,16 @@ namespace NamedMetaTagManager
 
         private void OnCheckboxToggled(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox checkBox && checkBox.Tag is SystemDrawingColor color)
+            if (sender is CheckBox checkBox && checkBox.Tag is WinUIColor color)
             {
                 var isChecked = checkBox.IsChecked == true;
                 NotifyCheckboxChanged(color, isChecked);
             }
         }
 
-        private void NotifyCheckboxChanged(SystemDrawingColor color, bool isChecked)
+        private void NotifyCheckboxChanged(WinUIColor color, bool isChecked)
         {
             CheckboxStateChanged?.Invoke(color, isChecked);
-        }
-
-        private static WinUIColor ToWinUIColor(SystemDrawingColor color)
-        {
-            return WinUIColor.FromArgb(color.A, color.R, color.G, color.B);
         }
     }
 }

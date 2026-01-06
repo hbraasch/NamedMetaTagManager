@@ -5,7 +5,7 @@ using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI;
-using DrawingColor = System.Drawing.Color;
+using WinUIColor = Windows.UI.Color;
 
 namespace NamedMetaTagManager
 {
@@ -96,22 +96,21 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
 
         private void InitializeColorCheckboxes()
         {
-            var sampleColors = new List<DrawingColor>
+            var sampleColors = new List<WinUIColor>
             {
-                DrawingColor.Red,
-                DrawingColor.Green,
-                DrawingColor.Blue,
-                DrawingColor.Goldenrod
+                Colors.Red,
+                Colors.Green,
+                Colors.Blue,
+                Colors.Goldenrod
             };
             var sampleChecked = new List<bool> { true, false, true, false };
             ColorCheckboxes.Init(sampleColors, sampleChecked);
             ColorCheckboxes.CheckboxStateChanged += OnColorCheckboxStateChanged;
         }
 
-        private void OnColorCheckboxStateChanged(DrawingColor color, bool isChecked)
+        private void OnColorCheckboxStateChanged(WinUIColor color, bool isChecked)
         {
-            var label = string.IsNullOrWhiteSpace(color.Name) ? $"{color.R},{color.G},{color.B}" : color.Name;
-            SetStatus($"Color '{label}' checkbox is {(isChecked ? "checked" : "unchecked")}.");
+            SetStatus($"Color '{DescribeColor(color)}' checkbox is {(isChecked ? "checked" : "unchecked")}.");
         }
 
         private void SetStatus(string message)
@@ -123,7 +122,7 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
         {
             var (colors, isChecked) = ColorCheckboxes.GetCurrentState();
 
-            var nextColor = DrawingColor.FromArgb(
+            var nextColor = WinUIColor.FromArgb(
                 255,
                 (byte)((60 * colors.Count + 40) % 256),
                 (byte)((110 * colors.Count + 90) % 256),
@@ -133,8 +132,12 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
             isChecked.Add(false);
             ColorCheckboxes.Update(colors, isChecked);
 
-            var label = string.IsNullOrWhiteSpace(nextColor.Name) ? $"{nextColor.R},{nextColor.G},{nextColor.B}" : nextColor.Name;
-            SetStatus($"Added colour checkbox for '{label}'.");
+            SetStatus($"Added colour checkbox for '{DescribeColor(nextColor)}'.");
+        }
+
+        private static string DescribeColor(WinUIColor color)
+        {
+            return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
         }
     }
 }
