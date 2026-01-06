@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="80"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    MinHeight="44">
 
     <UserControl.Resources>
         <Style x:Key="ColorCheckboxStyle" TargetType="CheckBox">
@@ -22,19 +23,24 @@
                         <Grid x:Name="Root"
                               Width="{TemplateBinding Width}"
                               Height="{TemplateBinding Height}">
-                            <Border x:Name="ColorBlock"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="4" />
-                            <FontIcon x:Name="CheckGlyph"
-                                      Glyph="&#xE73E;"
-                                      FontFamily="Segoe Fluent Icons"
-                                      FontSize="16"
-                                      Foreground="{TemplateBinding Foreground}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      Opacity="0" />
+                            <Viewbox Stretch="Uniform">
+                                <Grid Width="28"
+                                      Height="28">
+                                    <Border x:Name="ColorBlock"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="4" />
+                                    <FontIcon x:Name="CheckGlyph"
+                                              Glyph="&#xE73E;"
+                                              FontFamily="Segoe Fluent Icons"
+                                              FontSize="16"
+                                              Foreground="{TemplateBinding Foreground}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Opacity="0" />
+                                </Grid>
+                            </Viewbox>
 
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
@@ -99,7 +105,8 @@
     <ScrollViewer HorizontalScrollMode="Enabled"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollMode="Disabled"
-                  VerticalScrollBarVisibility="Disabled">
+                  VerticalScrollBarVisibility="Disabled"
+                  VerticalAlignment="Stretch">
         <StackPanel x:Name="CheckboxPanel"
                     Orientation="Horizontal"
                     Spacing="8"

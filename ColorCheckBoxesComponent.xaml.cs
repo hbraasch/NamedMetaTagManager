@@ -16,6 +16,8 @@ namespace NamedMetaTagManager
         public ColorCheckBoxesComponent()
         {
             InitializeComponent();
+            SizeChanged += OnSizeChanged;
+            Loaded += OnLoaded;
         }
 
         /// <summary>
@@ -47,6 +49,8 @@ namespace NamedMetaTagManager
             {
                 AddCheckbox(colors[i], isChecked[i]);
             }
+
+            UpdateCheckboxSizes();
         }
 
         public void Update(List<WinUIColor> colors, List<bool> isChecked)
@@ -98,6 +102,8 @@ namespace NamedMetaTagManager
 
             _checkboxes.Add((color, checkBox));
             CheckboxPanel.Children.Add(checkBox);
+
+            UpdateCheckboxSizes();
         }
 
         private void OnCheckboxToggled(object sender, RoutedEventArgs e)
@@ -112,6 +118,41 @@ namespace NamedMetaTagManager
         private void NotifyCheckboxChanged(WinUIColor color, bool isChecked)
         {
             CheckboxStateChanged?.Invoke(color, isChecked);
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            UpdateCheckboxSizes();
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateCheckboxSizes();
+        }
+
+        private void UpdateCheckboxSizes()
+        {
+            var padding = CheckboxPanel.Padding;
+            var availableHeight = CheckboxPanel.ActualHeight > 0
+                ? CheckboxPanel.ActualHeight
+                : ActualHeight;
+
+            if (availableHeight <= 0)
+            {
+                return;
+            }
+
+            var targetSize = availableHeight - padding.Top - padding.Bottom;
+            if (targetSize <= 0)
+            {
+                return;
+            }
+
+            foreach (var (_, checkBox) in _checkboxes)
+            {
+                checkBox.Height = targetSize;
+                checkBox.Width = targetSize;
+            }
         }
     }
 }
