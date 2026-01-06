@@ -26,6 +26,12 @@ namespace NamedMetaTagManager
         /// </summary>
         /// <returns></returns>
         public List<Color> GetCheckedColors();
+
+        /// <summary>
+        /// Used to get current state of the component
+        /// </summary>
+        /// <returns></returns>
+        public (List<Color>, List<bool>) GetCurrentState();
         /// <summary>
         /// Callback which triggers when one of the checkboxes change
         /// </summary>

@@ -118,5 +118,10 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
         {
             StatusText.Text = message;
         }
+
+        private void OnAddColourCheckBoxClicked(object sender, RoutedEventArgs e)
+        {
+            // ToDo
+        }
     }
 }
