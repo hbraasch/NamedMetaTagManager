@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI;
+using DrawingColor = System.Drawing.Color;
 
 namespace NamedMetaTagManager
 {
@@ -15,6 +17,7 @@ namespace NamedMetaTagManager
         {
             InitializeComponent();
             SeedEditor();
+            InitializeColorCheckboxes();
         }
 
         private void SeedEditor()
@@ -89,6 +92,26 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
         {
             var content = _manager.GetNamedTagContentFromEditor(Editor, CurrentName);
             SetStatus($"Content for '{CurrentName}': {content}");
+        }
+
+        private void InitializeColorCheckboxes()
+        {
+            var sampleColors = new List<DrawingColor>
+            {
+                DrawingColor.Red,
+                DrawingColor.Green,
+                DrawingColor.Blue,
+                DrawingColor.Goldenrod
+            };
+            var sampleChecked = new List<bool> { true, false, true, false };
+            ColorCheckboxes.Init(sampleColors, sampleChecked);
+            ColorCheckboxes.CheckboxStateChanged += OnColorCheckboxStateChanged;
+        }
+
+        private void OnColorCheckboxStateChanged(DrawingColor color, bool isChecked)
+        {
+            var label = string.IsNullOrWhiteSpace(color.Name) ? $"{color.R},{color.G},{color.B}" : color.Name;
+            SetStatus($"Color '{label}' checkbox is {(isChecked ? "checked" : "unchecked")}.");
         }
 
         private void SetStatus(string message)

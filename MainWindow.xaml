@@ -13,7 +13,7 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="12" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="12" RowSpacing="12">
         <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBox x:Name="TagNameInput" Width="160" PlaceholderText="Metatag name" Text="important"/>
@@ -31,7 +31,12 @@
 
         <TextBlock Grid.Row="1" x:Name="StatusText" Text="Ready" TextWrapping="Wrap"/>
 
-        <Grid Grid.Row="2" RowDefinitions="Auto,*" RowSpacing="8">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <TextBlock Text="Color checkboxes:" VerticalAlignment="Center"/>
+            <local:ColorCheckBoxesComponent x:Name="ColorCheckboxes" Height="44"/>
+        </StackPanel>
+
+        <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="8">
             <TextBlock Text="RichEditBox with sample tags" Style="{StaticResource BodyStrongTextBlockStyle}"/>
             <RichEditBox x:Name="Editor" Grid.Row="1" AcceptsReturn="True" VerticalAlignment="Stretch"
                          IsSpellCheckEnabled="False" TextWrapping="Wrap"/>
