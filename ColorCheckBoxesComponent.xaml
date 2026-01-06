@@ -9,6 +9,93 @@
     d:DesignHeight="80"
     d:DesignWidth="400">
 
+    <UserControl.Resources>
+        <Style x:Key="ColorCheckboxStyle" TargetType="CheckBox">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid x:Name="Root"
+                              Width="{TemplateBinding Width}"
+                              Height="{TemplateBinding Height}">
+                            <Border x:Name="ColorBlock"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4" />
+                            <FontIcon x:Name="CheckGlyph"
+                                      Glyph="&#xE73E;"
+                                      FontFamily="Segoe Fluent Icons"
+                                      FontSize="16"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Opacity="0" />
+
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ColorBlock"
+                                                             Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                             To="0.92"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ColorBlock"
+                                                             Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                             To="0.85"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ColorBlock"
+                                                             Storyboard.TargetProperty="(UIElement.Opacity)"
+                                                             To="0.4"
+                                                             Duration="0:0:0.05" />
+                                            <DoubleAnimation Storyboard.TargetName="CheckGlyph"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0.4"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualState x:Name="Unchecked" />
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="CheckGlyph"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="CheckGlyph"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.05" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <ScrollViewer HorizontalScrollMode="Enabled"
                   HorizontalScrollBarVisibility="Auto"
                   VerticalScrollMode="Disabled"
