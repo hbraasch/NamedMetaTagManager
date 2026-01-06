@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI;
+using WinUIColor = Windows.UI.Color;
 
 namespace NamedMetaTagManager
 {
@@ -31,7 +32,7 @@ namespace NamedMetaTagManager
         /// Used to get current state of the component
         /// </summary>
         /// <returns></returns>
-        public (List<Color>, List<bool>) GetCurrentState();
+        public (List<WinUIColor> Colors, List<bool> IsChecked) GetCurrentState()
         /// <summary>
         /// Callback which triggers when one of the checkboxes change
         /// </summary>
