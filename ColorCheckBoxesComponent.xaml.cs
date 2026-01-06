@@ -68,6 +68,20 @@ namespace NamedMetaTagManager
             return Task.FromResult<Action<SystemDrawingColor, bool>>(NotifyCheckboxChanged);
         }
 
+        public (List<SystemDrawingColor> Colors, List<bool> IsChecked) GetCurrentState()
+        {
+            var colors = new List<SystemDrawingColor>(_checkboxes.Count);
+            var states = new List<bool>(_checkboxes.Count);
+
+            foreach (var (color, checkBox) in _checkboxes)
+            {
+                colors.Add(color);
+                states.Add(checkBox.IsChecked == true);
+            }
+
+            return (colors, states);
+        }
+
         private void AddCheckbox(SystemDrawingColor color, bool isChecked)
         {
             var checkBox = new CheckBox

@@ -121,7 +121,20 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
 
         private void OnAddColourCheckBoxClicked(object sender, RoutedEventArgs e)
         {
-            // ToDo
+            var (colors, isChecked) = ColorCheckboxes.GetCurrentState();
+
+            var nextColor = DrawingColor.FromArgb(
+                255,
+                (byte)((60 * colors.Count + 40) % 256),
+                (byte)((110 * colors.Count + 90) % 256),
+                (byte)((170 * colors.Count + 140) % 256));
+
+            colors.Add(nextColor);
+            isChecked.Add(false);
+            ColorCheckboxes.Update(colors, isChecked);
+
+            var label = string.IsNullOrWhiteSpace(nextColor.Name) ? $"{nextColor.R},{nextColor.G},{nextColor.B}" : nextColor.Name;
+            SetStatus($"Added colour checkbox for '{label}'.");
         }
     }
 }
