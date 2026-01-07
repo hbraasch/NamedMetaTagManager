@@ -32,9 +32,9 @@
 
         <TextBlock Grid.Row="1" x:Name="StatusText" Text="Ready" TextWrapping="Wrap"/>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-            <TextBlock Text="Color checkboxes:" VerticalAlignment="Center"/>
-            <local:ColorCheckBoxesComponent x:Name="ColorCheckboxes"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Height="10">
+            <TextBlock Text="Color checkboxes:" VerticalAlignment="Center" FontSize="5"/>
+            <local:ColorCheckBoxesComponent x:Name="ColorCheckboxes" HorizontalAlignment="Left"/>
         </StackPanel>
 
         <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="8">
