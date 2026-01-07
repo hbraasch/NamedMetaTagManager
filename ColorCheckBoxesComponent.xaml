@@ -12,8 +12,8 @@
 
     <UserControl.Resources>
         <Style x:Key="ColorCheckboxStyle" TargetType="CheckBox">
-            <Setter Property="Width" Value="28" />
-            <Setter Property="Height" Value="28" />
+            <Setter Property="Width" Value="15" />
+            <Setter Property="Height" Value="15" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="White" />
@@ -24,8 +24,8 @@
                               Width="{TemplateBinding Width}"
                               Height="{TemplateBinding Height}">
                             <Viewbox Stretch="Uniform">
-                                <Grid Width="28"
-                                      Height="28">
+                                <Grid Width="15"
+                                      Height="15">
                                     <Border x:Name="ColorBlock"
                                             Background="{TemplateBinding Background}"
                                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -34,7 +34,7 @@
                                     <FontIcon x:Name="CheckGlyph"
                                               Glyph="&#xE73E;"
                                               FontFamily="Segoe Fluent Icons"
-                                              FontSize="16"
+                                              FontSize="8"
                                               Foreground="{TemplateBinding Foreground}"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"

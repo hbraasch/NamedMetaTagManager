@@ -94,7 +94,8 @@ namespace NamedMetaTagManager
                 VerticalAlignment = VerticalAlignment.Center,
                 Background = new SolidColorBrush(color),
                 BorderBrush = new SolidColorBrush(WinUIColor.FromArgb(255, 200, 200, 200)),
-                Style = (Style)Resources["ColorCheckboxStyle"]
+                Style = (Style)Resources["ColorCheckboxStyle"],
+                MinHeight = 0, MinWidth=0
             };
 
             checkBox.Checked += OnCheckboxToggled;
