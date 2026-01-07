@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using WinUIColor = Windows.UI.Color;
 
-namespace NamedMetaTagManager
+namespace CodexNamedMetaTagManager
 {
     public sealed partial class ColorCheckBoxesComponent : UserControl, IColorCheckBoxesComponent
     {

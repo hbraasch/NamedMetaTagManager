@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Windows.UI;
 using WinUIColor = Windows.UI.Color;
 
-namespace NamedMetaTagManager
+namespace CodexNamedMetaTagManager
 {
     public sealed partial class MainWindow : Window
     {

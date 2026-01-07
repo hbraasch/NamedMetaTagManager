@@ -6,7 +6,7 @@ using Microsoft.UI.Text;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI;
 
-namespace NamedMetaTagManager
+namespace CodexNamedMetaTagManager
 {
     internal interface INamedMetaTagManager
     {

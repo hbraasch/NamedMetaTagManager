@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI;
 using WinUIColor = Windows.UI.Color;
 
-namespace NamedMetaTagManager
+namespace CodexNamedMetaTagManager
 {
     internal interface IColorCheckBoxesComponent
     {
