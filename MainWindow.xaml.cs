@@ -11,7 +11,7 @@ namespace NamedMetaTagManager
 {
     public sealed partial class MainWindow : Window
     {
-        private readonly NamedMetaTagManagerService _manager = new();
+        private readonly NamedMetaTagManager _manager = new();
 
         public MainWindow()
         {
