@@ -8,7 +8,7 @@ using Windows.UI;
 
 namespace CodexNamedMetaTagManager
 {
-    internal interface INamedMetaTagManager
+    public interface INamedMetaTagManager
     {
         /// <summary>
         /// Used to add a named metatag to the editor at the current cursor position. If text is selected, the metatag will wrap the selected text. If no text is selected, the closed metatag will be inserted at the cursor position.
@@ -53,7 +53,7 @@ namespace CodexNamedMetaTagManager
         public string GetNamedTagContentFromEditor(RichEditBox editor, string metatagName);
     }
 
-    internal class NamedMetaTagManager : INamedMetaTagManager
+    public class NamedMetaTagManager : INamedMetaTagManager
     {
         public void AddNamedTagToEditor(RichEditBox editor, string metatagName)
         {
