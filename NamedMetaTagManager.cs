@@ -124,7 +124,12 @@ namespace CodexNamedMetaTagManager
             }
             else
             {
-                ApplyHidden(editor, startIndex, endIndex - startIndex, isHidden);
+                var startTag = $"<{metatagName}>";
+                var endTag = $"</{metatagName}>";
+                var endTagStart = endIndex - endTag.Length;
+
+                ApplyHidden(editor, startIndex, startTag.Length, isHidden);
+                ApplyHidden(editor, endTagStart, endTag.Length, isHidden);
             }
 
             return true;
