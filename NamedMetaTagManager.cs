@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml.Controls;
+using RtfPipe.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Windows.UI;
 
 namespace CodexNamedMetaTagManager
@@ -108,6 +109,15 @@ namespace CodexNamedMetaTagManager
             return true;
         }
 
+        public void RemoveAllNamedTagFromEditor(RichEditBox editor)
+        {
+            var nameTags = GetNamedTagsInEditor(editor);
+            foreach (var nameTag in nameTags)
+            {
+                RemoveNamedTagFromEditor(editor, nameTag);
+            }
+        }
+
         public bool HideNamedTagInEditor(RichEditBox editor, string metatagName, bool isHidden)
         {
             var text = GetEditorText(editor);
@@ -133,6 +143,15 @@ namespace CodexNamedMetaTagManager
             }
 
             return true;
+        }
+
+        public void HideAllNamedTagsInEditor(RichEditBox editor, bool isHidden)
+        {
+            var nameTags = GetNamedTagsInEditor(editor);
+            foreach (var nameTag in nameTags)
+            {
+                HideNamedTagInEditor(editor, nameTag, isHidden);
+            }
         }
 
         public bool HiliteNamedTagInEditor(RichEditBox editor, string metatagName, bool isHilited, Color hiliteColor)
