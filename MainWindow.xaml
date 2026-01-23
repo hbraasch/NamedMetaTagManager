@@ -27,6 +27,7 @@
                 <Button Content="Check Tag" Click="OnCheckTagClicked"/>
                 <Button Content="Get Tag Content" Click="OnGetContentClicked"/>
                 <Button Content="Add colour checkbox" Click="OnAddColourCheckBoxClicked"/>
+                <Button Content="Restore drafts" Click="OnRestoreDraftsClicked"/>
             </StackPanel>
         </ScrollViewer>
 
@@ -37,10 +38,15 @@
             <local:ColorCheckBoxesComponent x:Name="ColorCheckboxes" HorizontalAlignment="Left" VerticalAlignment="Center"/>
         </StackPanel>
 
-        <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="8">
+        <StackPanel Grid.Row="3" Spacing="8">
             <TextBlock Text="RichEditBox with sample tags" Style="{StaticResource BodyStrongTextBlockStyle}"/>
-            <RichEditBox x:Name="Editor" Grid.Row="1" AcceptsReturn="True" VerticalAlignment="Stretch"
-                         IsSpellCheckEnabled="False" TextWrapping="Wrap"/>
-        </Grid>
+            <RichEditBox x:Name="Editor" AcceptsReturn="True" VerticalAlignment="Stretch"
+                         IsSpellCheckEnabled="False" TextWrapping="Wrap"
+                         local:RichEditBoxKeyLogger.IsEnabled="True"/>
+            <TextBlock Text="Secondary RichEditBox" Style="{StaticResource BodyStrongTextBlockStyle}"/>
+            <RichEditBox x:Name="SecondaryEditor" AcceptsReturn="True" VerticalAlignment="Stretch"
+                         IsSpellCheckEnabled="False" TextWrapping="Wrap"
+                         local:RichEditBoxKeyLogger.IsEnabled="True"/>
+        </StackPanel>
     </Grid>
 </Window>
