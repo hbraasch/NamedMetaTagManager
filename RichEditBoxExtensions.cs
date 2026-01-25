@@ -59,6 +59,7 @@ namespace CodexNamedMetaTagManager
                     _timer.Stop();
                     _timer.Start();
                 };
+                editor.LostFocus += (_, __) => SaveIfChanged();
             }
 
             public void Update(Action<string> saveAction, TimeSpan timeout)
@@ -80,24 +81,34 @@ namespace CodexNamedMetaTagManager
 
             private void OnTimerTick(object? sender, object e)
             {
-                if (_timer is null || _editor is null || _saveAction is null)
+                if (_timer is null)
                 {
                     return;
                 }
 
                 _timer.Stop();
-                var currentRtf = GetRtf(_editor);
-                if (!string.Equals(currentRtf, _lastSavedRtf, StringComparison.Ordinal))
-                {
-                    _lastSavedRtf = currentRtf;
-                    _saveAction(currentRtf);
-                }
+                SaveIfChanged();
             }
 
             private static string GetRtf(RichEditBox editor)
             {
                 editor.Document.GetText(TextGetOptions.FormatRtf, out var text);
                 return text?.TrimEnd('\0') ?? string.Empty;
+            }
+
+            private void SaveIfChanged()
+            {
+                if (_editor is null || _saveAction is null)
+                {
+                    return;
+                }
+
+                var currentRtf = GetRtf(_editor);
+                if (!string.Equals(currentRtf, _lastSavedRtf, StringComparison.Ordinal))
+                {
+                    _lastSavedRtf = currentRtf;
+                    _saveAction(currentRtf);
+                }
             }
         }
     }
