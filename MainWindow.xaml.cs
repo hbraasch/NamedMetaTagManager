@@ -29,12 +29,7 @@ Here is an encapsulated tag: <summary>This is wrapped content.</summary>
 Here is a nested example: <important>Keep <childOne>child one</childOne> and <childTwo>child two</childTwo> safe</important>.
 """;
             Editor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, sample);
-
-            const string secondarySample = """
-Secondary editor draft.
-Use this area to test the combined draft recovery popup.
-""";
-            SecondaryEditor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, secondarySample);
+            Editor.SetSaveAction((string currrentRtfText) => { // Save to database here}, 10000);
         }
 
         private string CurrentName => string.IsNullOrWhiteSpace(TagNameInput.Text) ? "sample" : TagNameInput.Text.Trim();
@@ -141,14 +136,14 @@ Use this area to test the combined draft recovery popup.
             SetStatus($"Added colour checkbox for '{DescribeColor(nextColor)}'.");
         }
 
-        private async void OnRestoreDraftsClicked(object sender, RoutedEventArgs e)
-        {
-            await RichEditBoxKeyLogger.GetLatestKeystrokes(Content.XamlRoot);
-        }
 
         private static string DescribeColor(WinUIColor color)
         {
             return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
+
+            
         }
+
+
     }
 }
