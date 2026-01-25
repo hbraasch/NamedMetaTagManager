@@ -29,7 +29,10 @@ Here is an encapsulated tag: <summary>This is wrapped content.</summary>
 Here is a nested example: <important>Keep <childOne>child one</childOne> and <childTwo>child two</childTwo> safe</important>.
 """;
             Editor.Document.SetText(Microsoft.UI.Text.TextSetOptions.None, sample);
-            Editor.SetSaveAction((string currrentRtfText) => { // Save to database here}, 10000);
+            Editor.SetSaveAction((currrentRtfText) => { 
+                // Save
+            
+            }, 10000);
         }
 
         private string CurrentName => string.IsNullOrWhiteSpace(TagNameInput.Text) ? "sample" : TagNameInput.Text.Trim();
