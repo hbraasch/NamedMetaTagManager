@@ -44,6 +44,7 @@ namespace CodexNamedMetaTagManager
         /// <param name="editor"></param>
         /// <returns></returns>
         public List<string> GetNamedTagsInEditor(RichEditBox editor);
+        public List<(string Name, bool IsEncapsulating)> GetNamedTagsInEditorWithDetails(RichEditBox editor);
         public bool IsNamedTagPresentInEditor(RichEditBox editor, string metatagName);
         /// <summary>
         /// Used to get the content within the first occurrence of a named metatag in the editor. If the metatag is a closed tag, an empty string will be returned. If any child metatags are present within the named metatag, they will be removed (only the tags) in the returned content.
@@ -178,6 +179,24 @@ namespace CodexNamedMetaTagManager
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     tags.Add(name);
+                }
+            }
+
+            return tags;
+        }
+
+        public List<(string Name, bool IsEncapsulating)> GetNamedTagsInEditorWithDetails(RichEditBox editor)
+        {
+            var text = GetEditorText(editor);
+            var matches = Regex.Matches(text, "<(/?)([A-Za-z0-9_\\-]+)(/?)>");
+            var tags = new List<(string Name, bool IsEncapsulating)>();
+            foreach (Match match in matches)
+            {
+                var name = match.Groups[2].Value;
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    var isSelfClosing = match.Groups[3].Value == "/";
+                    tags.Add((name, !isSelfClosing));
                 }
             }
 

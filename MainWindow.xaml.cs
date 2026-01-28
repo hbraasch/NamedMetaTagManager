@@ -86,6 +86,19 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
             SetStatus(tags.Any() ? $"Tags: {string.Join(", ", tags)}" : "No tags found.");
         }
 
+        private void OnListTagsWithDetailsClicked(object sender, RoutedEventArgs e)
+        {
+            var tags = _manager.GetNamedTagsInEditorWithDetails(Editor);
+            if (!tags.Any())
+            {
+                SetStatus("No tags found.");
+                return;
+            }
+
+            var formatted = tags.Select(tag => $"{tag.Name} ({(tag.IsEncapsulating ? "encapsulating" : "closed")})");
+            SetStatus($"Tags: {string.Join(", ", formatted)}");
+        }
+
         private void OnCheckTagClicked(object sender, RoutedEventArgs e)
         {
             var present = _manager.IsNamedTagPresentInEditor(Editor, CurrentName);
