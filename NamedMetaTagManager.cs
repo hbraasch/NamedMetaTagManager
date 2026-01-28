@@ -175,6 +175,11 @@ namespace CodexNamedMetaTagManager
             var tags = new List<string>();
             foreach (Match match in matches)
             {
+                if (match.Groups[1].Value == "/")
+                {
+                    continue;
+                }
+
                 var name = match.Groups[2].Value;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
@@ -192,6 +197,11 @@ namespace CodexNamedMetaTagManager
             var tags = new List<(string Name, bool IsEncapsulating)>();
             foreach (Match match in matches)
             {
+                if (match.Groups[1].Value == "/")
+                {
+                    continue;
+                }
+
                 var name = match.Groups[2].Value;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
