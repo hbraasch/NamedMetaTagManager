@@ -24,6 +24,7 @@
                 <Button Content="Highlight Tag" Click="OnHiliteTagClicked"/>
                 <Button Content="Clear Highlight" Click="OnClearHiliteTagClicked"/>
                 <Button Content="List Tags" Click="OnListTagsClicked"/>
+                <Button Content="List Tags (Detailed)" Click="OnListTagsWithDetailsClicked"/>
                 <Button Content="Check Tag" Click="OnCheckTagClicked"/>
                 <Button Content="Get Tag Content" Click="OnGetContentClicked"/>
                 <Button Content="Add colour checkbox" Click="OnAddColourCheckBoxClicked"/>
