@@ -67,11 +67,21 @@ namespace CodexNamedMetaTagManager
                 throw new ArgumentException("Metatag name must be provided.", nameof(metatagName));
             }
 
+            #region *// Add the named tag
             if (!string.IsNullOrEmpty(trimmedSelection))
             {
-                if (ContainsTag(trimmedSelection, metatagName))
+                var tagsDetails = GetNamedTagsInTextWithDetails(trimmedSelection);
+                var namedTag = tagsDetails.Find(t => t.Name.Equals(metatagName, StringComparison.Ordinal));
+                if (namedTag.Name != null)
                 {
-                    throw new InvalidOperationException("Selected text already contains the same metatag.");
+                    // The selected text already contains the same metatag
+                    // Check if its a closed tag, that implies it wants to change to a encapsulating tag
+                    if (namedTag.IsEncapsulating)
+                    {
+                        throw new InvalidOperationException("Selected text already contains the same metatag.");
+                    }
+                    // Change closed to encapsulated tag, by removing that tag first (will be re-added below)
+                    RemoveNamedTagFromSelection(selection, metatagName);
                 }
 
                 selection.SetText(TextSetOptions.None, $"<{metatagName}>{trimmedSelection}</{metatagName}>");
@@ -79,22 +89,22 @@ namespace CodexNamedMetaTagManager
             else
             {
                 selection.SetText(TextSetOptions.None, $"<{metatagName}/>");
-            }
+            } 
+            #endregion
         }
 
-        public bool RemoveNamedTagFromEditor(RichEditBox editor, string metatagName)
+        public string RemoveNamedTagFromText(string plainText, string metatagName)
         {
-            var text = GetEditorText(editor);
-            var (startIndex, endIndex, isSelfClosing) = FindFirstTag(text, metatagName);
+            var (startIndex, endIndex, isSelfClosing) = FindFirstTag(plainText, metatagName);
             if (startIndex < 0)
             {
-                return false;
+                return plainText;
             }
 
             string updated;
             if (isSelfClosing)
             {
-                updated = text.Remove(startIndex, endIndex - startIndex);
+                updated = plainText.Remove(startIndex, endIndex - startIndex);
             }
             else
             {
@@ -102,11 +112,30 @@ namespace CodexNamedMetaTagManager
                 var endTag = $"</{metatagName}>";
                 var contentStart = startIndex + startTag.Length;
                 var contentLength = endIndex - contentStart - endTag.Length;
-                var innerContent = text.Substring(contentStart, contentLength);
-                updated = text.Remove(startIndex, endIndex - startIndex).Insert(startIndex, innerContent);
+                var innerContent = plainText.Substring(contentStart, contentLength);
+                updated = plainText.Remove(startIndex, endIndex - startIndex).Insert(startIndex, innerContent);
             }
 
+            return plainText;
+        }
+
+        public bool RemoveNamedTagFromEditor(RichEditBox editor, string metatagName)
+        {
+            var text = GetEditorText(editor);
+
+            var updated = RemoveNamedTagFromText(text, metatagName);
+
             SetEditorText(editor, updated);
+            return true;
+        }
+
+        public bool RemoveNamedTagFromSelection(ITextSelection selection, string metatagName)
+        {
+            selection.GetText(TextGetOptions.None, out var selectedText);
+
+            var updated = RemoveNamedTagFromText(selectedText, metatagName);
+
+            selection.SetText(TextSetOptions.None, updated);
             return true;
         }
 
@@ -117,6 +146,19 @@ namespace CodexNamedMetaTagManager
             {
                 RemoveNamedTagFromEditor(editor, nameTag);
             }
+        }
+
+        public string RemoveAllNamedTagsFromRtfText(string rtfText)
+        {
+            var workEditor = new RichEditBox();
+            workEditor.Document.SetText(TextSetOptions.FormatRtf, rtfText);
+            var nameTags = GetNamedTagsInEditor(workEditor);
+            foreach (var nameTag in nameTags)
+            {
+                RemoveNamedTagFromEditor(workEditor, nameTag);
+            }
+            workEditor.Document.GetText(TextGetOptions.FormatRtf, out string outRtfText);
+            return outRtfText;
         }
 
         public bool HideNamedTagInEditor(RichEditBox editor, string metatagName, bool isHidden)
@@ -190,10 +232,9 @@ namespace CodexNamedMetaTagManager
             return tags;
         }
 
-        public List<(string Name, bool IsEncapsulating)> GetNamedTagsInEditorWithDetails(RichEditBox editor)
+        public List<(string Name, bool IsEncapsulating)> GetNamedTagsInTextWithDetails(string plainText)
         {
-            var text = GetEditorText(editor);
-            var matches = Regex.Matches(text, "<(/?)([A-Za-z0-9_\\-]+)(/?)>");
+            var matches = Regex.Matches(plainText, "<(/?)([A-Za-z0-9_\\-]+)(/?)>");
             var tags = new List<(string Name, bool IsEncapsulating)>();
             foreach (Match match in matches)
             {
@@ -211,6 +252,13 @@ namespace CodexNamedMetaTagManager
             }
 
             return tags;
+        }
+
+        public List<(string Name, bool IsEncapsulating)> GetNamedTagsInEditorWithDetails(RichEditBox editor)
+        {
+            var text = GetEditorText(editor);
+            
+            return GetNamedTagsInTextWithDetails(text);
         }
 
         public bool IsNamedTagPresentInEditor(RichEditBox editor, string metatagName)
