@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.UI;
 using WinUIColor = Windows.UI.Color;
+using RichEditBoxExtraMenus;
 
 namespace CodexNamedMetaTagManager
 {
@@ -18,6 +19,7 @@ namespace CodexNamedMetaTagManager
             InitializeComponent();
             SeedEditor();
             InitializeColorCheckboxes();
+            RichEditBoxExtraMenuLibrary.AttachSendToAiForRefinementMenu(Editor, OnSendToAiForRefinement);
         }
 
         private void SeedEditor()
@@ -109,6 +111,31 @@ Here is a nested example: <important>Keep <childOne>child one</childOne> and <ch
         {
             var content = _manager.GetNamedTagContentFromEditor(Editor, CurrentName);
             SetStatus($"Content for '{CurrentName}': {content}");
+        }
+
+
+        private async void OnSendToAiForRefinement()
+        {
+            Editor.Document.Selection.GetText(Microsoft.UI.Text.TextGetOptions.None, out var selectedText);
+            selectedText = selectedText?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(selectedText))
+            {
+                SetStatus("Select text first, then use Send to AI for refinement.");
+                return;
+            }
+
+            SetStatus($"Stub: sent {selectedText.Length} selected characters to AI for refinement.");
+
+            var dialog = new ContentDialog
+            {
+                XamlRoot = Content.XamlRoot,
+                Title = "Send to AI for refinement",
+                Content = "Stub only: this demo does not call any AI service yet.",
+                CloseButtonText = "OK"
+            };
+
+            await dialog.ShowAsync();
         }
 
         private void InitializeColorCheckboxes()
