@@ -40,20 +40,31 @@ namespace RichEditBoxExtraMenus
                 flyout.PrimaryCommands.Add(sendToAiButton);
             }
 
+            void AttachOpeningHandler(TextCommandBarFlyout flyout)
+            {
+                flyout.Opening += (_, __) => EnsureCommand(flyout);
+            }
+
             if (editor.SelectionFlyout is TextCommandBarFlyout selectionFlyout)
             {
-                EnsureCommand(selectionFlyout);
+                AttachOpeningHandler(selectionFlyout);
             }
             else
             {
-                var flyout = new TextCommandBarFlyout();
-                EnsureCommand(flyout);
-                editor.SelectionFlyout = flyout;
+                var selectionCommandBar = new TextCommandBarFlyout();
+                AttachOpeningHandler(selectionCommandBar);
+                editor.SelectionFlyout = selectionCommandBar;
             }
 
             if (editor.ContextFlyout is TextCommandBarFlyout contextFlyout)
             {
-                EnsureCommand(contextFlyout);
+                AttachOpeningHandler(contextFlyout);
+            }
+            else
+            {
+                var contextCommandBar = new TextCommandBarFlyout();
+                AttachOpeningHandler(contextCommandBar);
+                editor.ContextFlyout = contextCommandBar;
             }
         }
     }
