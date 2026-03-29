@@ -18,7 +18,7 @@ namespace RichEditBoxExtraMenus
                 throw new ArgumentNullException(nameof(onSendToAiForRefinement));
             }
 
-            const string sendToAiLabel = "Send to AI for refinement";
+            const string sendToAiLabel = "Send to AI";
             void EnsureCommand(TextCommandBarFlyout flyout)
             {
                 var alreadyPresent = flyout.PrimaryCommands
