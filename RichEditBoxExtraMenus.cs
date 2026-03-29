@@ -1,5 +1,4 @@
 using System;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace RichEditBoxExtraMenus
@@ -18,19 +17,7 @@ namespace RichEditBoxExtraMenus
                 throw new ArgumentNullException(nameof(onSendToAiForRefinement));
             }
 
-            var flyout = new TextCommandBarFlyout
-            {
-                IsUndoEnabled = true,
-                IsRedoEnabled = true,
-                IsCutEnabled = true,
-                IsCopyEnabled = true,
-                IsPasteEnabled = true,
-                IsBoldEnabled = true,
-                IsItalicEnabled = true,
-                IsUnderlineEnabled = true,
-                IsProofingMenuEnabled = true,
-                IsTextPredictionEnabled = true
-            };
+            var flyout = new TextCommandBarFlyout();
 
             var sendToAiButton = new AppBarButton
             {
@@ -41,6 +28,10 @@ namespace RichEditBoxExtraMenus
             sendToAiButton.Click += (_, __) => onSendToAiForRefinement();
 
             flyout.SecondaryCommands.Add(sendToAiButton);
+
+            // RichEditBox uses SelectionFlyout for text editing context actions.
+            // Setting ContextFlyout alone can leave the default text flyout in place.
+            editor.SelectionFlyout = flyout;
             editor.ContextFlyout = flyout;
         }
     }
