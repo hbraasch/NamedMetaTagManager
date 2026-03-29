@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.UI.Xaml.Controls;
 
 namespace RichEditBoxExtraMenus
@@ -17,22 +18,43 @@ namespace RichEditBoxExtraMenus
                 throw new ArgumentNullException(nameof(onSendToAiForRefinement));
             }
 
-            var flyout = new TextCommandBarFlyout();
-
-            var sendToAiButton = new AppBarButton
+            const string sendToAiLabel = "Send to AI for refinement";
+            void EnsureCommand(TextCommandBarFlyout flyout)
             {
-                Label = "Send to AI for refinement",
-                Icon = new SymbolIcon(Symbol.Message)
-            };
+                var alreadyPresent = flyout.PrimaryCommands
+                    .OfType<AppBarButton>()
+                    .Any(button => string.Equals(button.Label, sendToAiLabel, StringComparison.Ordinal));
 
-            sendToAiButton.Click += (_, __) => onSendToAiForRefinement();
+                if (alreadyPresent)
+                {
+                    return;
+                }
 
-            flyout.SecondaryCommands.Add(sendToAiButton);
+                var sendToAiButton = new AppBarButton
+                {
+                    Label = sendToAiLabel,
+                    Icon = new SymbolIcon(Symbol.Message)
+                };
 
-            // RichEditBox uses SelectionFlyout for text editing context actions.
-            // Setting ContextFlyout alone can leave the default text flyout in place.
-            editor.SelectionFlyout = flyout;
-            editor.ContextFlyout = flyout;
+                sendToAiButton.Click += (_, __) => onSendToAiForRefinement();
+                flyout.PrimaryCommands.Add(sendToAiButton);
+            }
+
+            if (editor.SelectionFlyout is TextCommandBarFlyout selectionFlyout)
+            {
+                EnsureCommand(selectionFlyout);
+            }
+            else
+            {
+                var flyout = new TextCommandBarFlyout();
+                EnsureCommand(flyout);
+                editor.SelectionFlyout = flyout;
+            }
+
+            if (editor.ContextFlyout is TextCommandBarFlyout contextFlyout)
+            {
+                EnsureCommand(contextFlyout);
+            }
         }
     }
 }
